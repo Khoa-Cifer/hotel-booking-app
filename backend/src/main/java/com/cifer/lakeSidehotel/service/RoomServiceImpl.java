@@ -1,5 +1,6 @@
 package com.cifer.lakeSidehotel.service;
 
+import com.cifer.lakeSidehotel.exception.InternalServerException;
 import com.cifer.lakeSidehotel.exception.ResourceNotFoundException;
 import com.cifer.lakeSidehotel.model.Room;
 import com.cifer.lakeSidehotel.repository.RoomRepository;
@@ -61,6 +62,31 @@ public class RoomServiceImpl implements IRoomService {
         if(theRoom.isPresent()) {
             roomRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public Room updateRoom(Long id, String roomType, BigDecimal roomPrice, byte[] photoBytes) throws SQLException {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
+        if (roomType != null) {
+            room.setRoomType(roomType);
+        }
+        if (roomPrice != null) {
+            room.setRoomPrice(roomPrice);
+        }
+        if (photoBytes != null && photoBytes.length > 0) {
+            try {
+                room.setPhoto(new SerialBlob(photoBytes));
+            } catch (SQLException e) {
+                throw new InternalServerException("Error updating room");
+            }
+        }
+        return roomRepository.save(room);
+    }
+
+    @Override
+    public Optional<Room> getRoomById(Long id) {
+        return Optional.of(roomRepository.findById(id).get());
     }
 }
 

@@ -6,10 +6,12 @@ import ExistingRooms from './components/room/ExistingRooms'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './components/home/Home'
 import EditRoom from './components/room/EditRoom'
+import NavBar from './components/layout/NavBar'
 
 function App() {
   return (
     <>
+      <NavBar/>
       <main>
         <Router>
           <Routes>

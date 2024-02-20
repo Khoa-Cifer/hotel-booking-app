@@ -19,12 +19,20 @@ const getAllRooms = () => {
     return axios.get("/rooms/all-rooms");
 }
 
-const updateRoom = (roomId, roomData) => {
-    
+const getRoomById = (id) => {
+    return axios.get(`/rooms/room/${id}`)
+}
+
+const updateRoom = (id, roomData) => {
+    const formData = new FormData();
+    formData.append("photo", roomData.photo);
+    formData.append("roomType", roomData.roomType);
+    formData.append("roomPrice", roomData.roomPrice);
+    return axios.put(`/rooms/update/${id}`, formData)
 }
 
 const deleteRoom = (id: unknown) => {
     return axios.delete(`/rooms/delete/room/${id}`);
 }
 
-export { addRoom, getRoomTypes, getAllRooms, deleteRoom }
+export { addRoom, getRoomTypes, getAllRooms, deleteRoom, updateRoom, getRoomById }
